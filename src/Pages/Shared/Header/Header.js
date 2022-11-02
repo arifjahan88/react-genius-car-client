@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
+import { AuthContext } from "../../../Contexts/AuthProvider";
 
 const Header = () => {
+  const { logout, user } = useContext(AuthContext);
   const navoptions = (
     <>
       <li className="font-semibold">
         <Link to="/">Home</Link>
-        <Link to="/login">Log In</Link>
-        <Link to="/signup">Sign Up</Link>
+        <Link>CheckOut</Link>
+        <Link to="/orders">Orders</Link>
+
+        {user?.uid ? (
+          <Link onClick={logout}>Log Out</Link>
+        ) : (
+          <>
+            <Link to="/login">Log In</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
+        )}
       </li>
     </>
   );

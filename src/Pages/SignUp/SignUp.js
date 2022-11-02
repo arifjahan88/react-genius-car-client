@@ -19,7 +19,7 @@ const SignUp = () => {
         const user = result.user;
         console.log(user);
       })
-      .catch((err) => console.error(err));
+      .then((err) => console.error(err));
   };
   return (
     <div className="hero my-10">

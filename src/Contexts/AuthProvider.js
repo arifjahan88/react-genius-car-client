@@ -3,31 +3,51 @@ import app from "../Firebase/Firebase.config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
 } from "firebase/auth";
 
 export const AuthContext = createContext();
 
 const auth = getAuth(app);
+const googleprovider = new GoogleAuthProvider();
+
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
   const [loading, setloading] = useState(true);
 
   const creteuser = (email, password) => {
+    setloading(true);
     return createUserWithEmailAndPassword(auth, email, password);
+  };
+  const login = (email, password) => {
+    setloading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+  const googlelogin = () => {
+    setloading(true);
+    return signInWithPopup(auth, googleprovider);
+  };
+  const logout = () => {
+    setloading(true);
+    return signOut(auth);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
       console.log(currentuser);
       setuser(currentuser);
+      setloading(false);
     });
     return () => {
       return unsubscribe();
     };
   }, []);
 
-  const AuthInfo = { user, loading, creteuser };
+  const AuthInfo = { user, loading, creteuser, login, googlelogin, logout };
   return (
     <AuthContext.Provider value={AuthInfo}>{children}</AuthContext.Provider>
   );

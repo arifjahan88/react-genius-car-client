@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import loginimage from "../../assets/images/login/login.svg";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../Contexts/AuthProvider";
 
 const Login = () => {
+  const { login, googlelogin } = useContext(AuthContext);
   const handlelogin = (event) => {
     event.preventDefault();
-    
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    login(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .then((err) => console.error(err));
   };
+
   return (
     <div className="hero my-10">
       <div className="hero-content grid md:grid-cols-2 gap-10 flex-col lg:flex-row">
@@ -72,7 +83,10 @@ const Login = () => {
                   </div>
                 </Link>
                 <Link>
-                  <div className="p-2 bg-slate-100 rounded-full mx-1">
+                  <div
+                    onClick={googlelogin}
+                    className="p-2 bg-slate-100 rounded-full mx-1"
+                  >
                     <FcGoogle></FcGoogle>
                   </div>
                 </Link>
