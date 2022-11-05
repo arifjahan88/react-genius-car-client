@@ -2,10 +2,14 @@ import React, { useContext } from "react";
 import loginimage from "../../assets/images/login/login.svg";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthProvider";
+import { authToken } from "../../Api/AuthToken";
 
 const Login = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
   const { login, googlelogin } = useContext(AuthContext);
   const handlelogin = (event) => {
     event.preventDefault();
@@ -15,9 +19,19 @@ const Login = () => {
     login(email, password)
       .then((result) => {
         const user = result.user;
-        console.log(user);
+        authToken(user);
+        navigate(from, { replace: true });
       })
-      .then((err) => console.error(err));
+      .catch((err) => console.error(err));
+  };
+  const handlegooglelogin = () => {
+    googlelogin()
+      .then((result) => {
+        const user = result.user;
+        authToken(user);
+        navigate(from, { replace: true });
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -84,7 +98,7 @@ const Login = () => {
                 </Link>
                 <Link>
                   <div
-                    onClick={googlelogin}
+                    onClick={handlegooglelogin}
                     className="p-2 bg-slate-100 rounded-full mx-1"
                   >
                     <FcGoogle></FcGoogle>

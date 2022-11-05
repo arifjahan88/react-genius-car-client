@@ -3,21 +3,36 @@ import { AuthContext } from "../../Contexts/AuthProvider";
 import OrderRow from "./OrderRow";
 
 const Orders = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [orders, setorders] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`)
-      .then((res) => res.json())
+    fetch(
+      `https://react-genius-car-server.vercel.app/orders?email=${user?.email}`,
+      {
+        headers: {
+          authorization: `bearer ${localStorage.getItem("genius-car-token")}`,
+        },
+      }
+    )
+      .then((res) => {
+        if (res.status === 401 && res.status === 403) {
+          return logout();
+        }
+        return res.json();
+      })
       .then((data) => setorders(data))
       .catch((err) => console.error(err));
-  }, [user?.email]);
+  }, [user?.email, logout]);
 
   const handledelete = (id) => {
     const proceed = window.confirm("Are you sure to Delete");
     if (proceed) {
-      fetch(`http://localhost:5000/orders/${id}`, {
+      fetch(`https://react-genius-car-server.vercel.app/orders/${id}`, {
         method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("genius-car-token")}`,
+        },
       })
         .then((res) => res.json())
         .then((data) => {
@@ -31,10 +46,11 @@ const Orders = () => {
     }
   };
   const handlestatusupdate = (id) => {
-    fetch(`http://localhost:5000/orders/${id}`, {
+    fetch(`https://react-genius-car-server.vercel.app/orders/${id}`, {
       method: "PATCH",
       headers: {
-        "content-type": "application.json",
+        "content-type": "application/json",
+        authorization: `bearer ${localStorage.getItem("genius-car-token")}`,
       },
       body: JSON.stringify({ status: "approved" }),
     })

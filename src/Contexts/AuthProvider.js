@@ -32,13 +32,12 @@ const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, googleprovider);
   };
   const logout = () => {
-    setloading(true);
+    localStorage.removeItem("genius-car-token");
     return signOut(auth);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-      console.log(currentuser);
       setuser(currentuser);
       setloading(false);
     });
