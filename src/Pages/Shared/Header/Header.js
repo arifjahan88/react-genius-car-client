@@ -8,16 +8,16 @@ const Header = () => {
   const navoptions = (
     <>
       <li className="font-semibold">
-        <Link to="/">Home</Link>
-        <Link>CheckOut</Link>
-        <Link to="/orders">Orders</Link>
+        <Link className="mr-2" to="/">Home</Link>
+        <Link className="mr-2">CheckOut</Link>
+        <Link className="mr-2" to="/orders">Orders</Link>
 
         {user?.uid ? (
-          <Link onClick={logout}>Log Out</Link>
+          <Link className="mr-2" onClick={logout}>Log Out</Link>
         ) : (
           <>
-            <Link to="/login">Log In</Link>
-            <Link to="/signup">Sign Up</Link>
+            <Link className="mr-2" to="/login">Log In</Link>
+            <Link className="mr-2" to="/signup">Sign Up</Link>
           </>
         )}
       </li>
