@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 import { AuthContext } from "../../../Contexts/AuthProvider";
@@ -8,16 +8,25 @@ const Header = () => {
   const navoptions = (
     <>
       <li className="font-semibold">
-        <Link className="mr-2" to="/">Home</Link>
-        <Link className="mr-2">CheckOut</Link>
-        <Link className="mr-2" to="/orders">Orders</Link>
+        <Link className="mr-2" to="/">
+          Home
+        </Link>
+        <Link className="mr-2" to="/orders">
+          Orders
+        </Link>
 
         {user?.uid ? (
-          <Link className="mr-2" onClick={logout}>Log Out</Link>
+          <Link className="mr-2" onClick={logout}>
+            Log Out
+          </Link>
         ) : (
           <>
-            <Link className="mr-2" to="/login">Log In</Link>
-            <Link className="mr-2" to="/signup">Sign Up</Link>
+            <Link className="mr-2" to="/login">
+              Log In
+            </Link>
+            <Link className="mr-2" to="/signup">
+              Sign Up
+            </Link>
           </>
         )}
       </li>

@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
-import loginimage from "../../assets/images/login/login.svg";
+import { useContext, useState } from "react";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { authToken } from "../../Api/AuthToken";
+import loginimage from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 const SignUp = () => {
-  const { creteuser } = useContext(AuthContext);
+  const { creteuser, googlelogin } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const [error, seterror] = useState("");
+
   const handlesignup = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -19,7 +25,23 @@ const SignUp = () => {
         const user = result.user;
         console.log(user);
       })
-      .then((err) => console.error(err));
+      .then((err) => {
+        console.error(err);
+        seterror(err.message);
+      });
+  };
+
+  const handlegooglelogin = () => {
+    googlelogin()
+      .then((result) => {
+        const user = result.user;
+        authToken(user);
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        seterror(err.message);
+      });
   };
   return (
     <div className="hero my-10">
@@ -68,6 +90,7 @@ const SignUp = () => {
                 name="password"
                 required
               />
+              <p className="text-red-500 text-xs my-1">{error}</p>
               <label className="label">
                 <p href="#" className="label-text-alt link link-hover">
                   Forgot password?
@@ -95,7 +118,10 @@ const SignUp = () => {
                   </div>
                 </Link>
                 <Link>
-                  <div className="p-2 bg-slate-100 rounded-full mx-1">
+                  <div
+                    onClick={handlegooglelogin}
+                    className="p-2 bg-slate-100 rounded-full mx-1"
+                  >
                     <FcGoogle></FcGoogle>
                   </div>
                 </Link>

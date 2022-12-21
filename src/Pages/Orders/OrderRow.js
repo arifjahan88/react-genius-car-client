@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const OrderRow = ({ order, handledelete, handlestatusupdate }) => {
   const { _id, servicename, price, customer, email, message, service, status } =

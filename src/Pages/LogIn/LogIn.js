@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
-import loginimage from "../../assets/images/login/login.svg";
+import { useContext, useState } from "react";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Contexts/AuthProvider";
 import { authToken } from "../../Api/AuthToken";
+import loginimage from "../../assets/images/login/login.svg";
+import { AuthContext } from "../../Contexts/AuthProvider";
 
 const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
+  const [error, seterror] = useState("");
   const { login, googlelogin } = useContext(AuthContext);
   const handlelogin = (event) => {
     event.preventDefault();
@@ -22,7 +23,10 @@ const Login = () => {
         authToken(user);
         navigate(from, { replace: true });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        seterror(err.message);
+      });
   };
   const handlegooglelogin = () => {
     googlelogin()
@@ -31,7 +35,10 @@ const Login = () => {
         authToken(user);
         navigate(from, { replace: true });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        seterror(err.message);
+      });
   };
 
   return (
@@ -70,6 +77,7 @@ const Login = () => {
                 name="password"
                 required
               />
+              <p className="text-red-500 text-xs my-1">{error}</p>
               <label className="label">
                 <p href="#" className="label-text-alt link link-hover">
                   Forgot password?

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
@@ -15,7 +15,6 @@ const CheckOut = () => {
     const postal = form.postal.value;
     const address = form.address.value;
 
-
     const order = {
       service: _id,
       servicename: title,
@@ -25,7 +24,7 @@ const CheckOut = () => {
       phone,
       currency,
       postal,
-      address
+      address,
     };
 
     if (phone) {
@@ -39,11 +38,7 @@ const CheckOut = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-        console.log(data);
-          if (data.acknowledged) {
-            alert("Place order successfully");
-            form.reset();
-          }
+          window.location.replace(data.url);
         })
         .catch((err) => console.error(err));
     } else {
@@ -91,7 +86,11 @@ const CheckOut = () => {
               defaultValue={user?.email}
               readOnly
             />
-            <select defaultValue="BDT" name="currency" className="select select-bordered w-full max-w-xs">
+            <select
+              defaultValue="BDT"
+              name="currency"
+              className="select select-bordered w-full max-w-xs"
+            >
               <option value="BDT">BDT</option>
               <option value="USD">USD</option>
             </select>
@@ -100,7 +99,6 @@ const CheckOut = () => {
               type="text"
               placeholder="Your postal Code"
               className="input w-full"
-
             />
           </div>
           <textarea
@@ -111,7 +109,7 @@ const CheckOut = () => {
         </div>
       </div>
       <div className="text-center mt-4">
-        <button className="btn btn-wide">Place Order</button>
+        <button className="btn btn-wide">PAY</button>
       </div>
     </form>
   );

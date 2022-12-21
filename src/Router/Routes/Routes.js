@@ -1,8 +1,12 @@
 import Main from "../../Layout/Main";
 import CheckOut from "../../Pages/CheckOut/CheckOut";
+import DisplayError from "../../Pages/DisplayError/DisplayError";
 import Home from "../../Pages/Home/Home/Home";
 import Login from "../../Pages/LogIn/LogIn";
 import Orders from "../../Pages/Orders/Orders";
+import PaymentSuccess from "../../Pages/PayemntSuccess/PaymentSuccess";
+import PaymentCancel from "../../Pages/PaymentCancel/PaymentCancel";
+import PaymentFail from "../../Pages/PaymentFail/PaymentFail";
 import SignUp from "../../Pages/SignUp/SignUp";
 import PrivateRoutes from "./PrivateRoutes";
 
@@ -12,11 +16,13 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <DisplayError></DisplayError>,
     children: [
       {
         path: "/",
         element: <Home></Home>,
       },
+
       {
         path: "login",
         element: <Login></Login>,
@@ -27,7 +33,11 @@ const router = createBrowserRouter([
       },
       {
         path: "checkout/:id",
-        element: <CheckOut></CheckOut>,
+        element: (
+          <PrivateRoutes>
+            <CheckOut></CheckOut>
+          </PrivateRoutes>
+        ),
         loader: ({ params }) =>
           fetch(
             `https://react-genius-car-server.vercel.app/services/${params.id}`
@@ -38,6 +48,30 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <Orders></Orders>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "payment/seccess",
+        element: (
+          <PrivateRoutes>
+            <PaymentSuccess></PaymentSuccess>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "payment/fail",
+        element: (
+          <PrivateRoutes>
+            <PaymentFail></PaymentFail>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "payment/cancel",
+        element: (
+          <PrivateRoutes>
+            <PaymentCancel></PaymentCancel>
           </PrivateRoutes>
         ),
       },
